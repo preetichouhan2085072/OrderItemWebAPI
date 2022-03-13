@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderitem-deployment
+  labels:
+    app: OrderItem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: OrderItem  
+  template:
+    metadata:
+      labels:
+        app: OrderItem
+    spec:
+      containers:
+      - name: dnazureacr04
+        image: dnazureacr04.azurecr.io/dnazurepreeti:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: orderwebiapisecretkey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderitemsvc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: OrderItem
